@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Manrope:wght@400;500;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#d9911e;
+  --gold-soft:#e2ae56;
+  --bg:#0b0908;
+  --bg2:#14110f;
+  --card:#1c1714;
+  --text:#f3ecdd;
+  --muted:#ad9f89;
+  --serif:'Playfair Display',serif;
+  --sans:'Manrope',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);overflow-x:hidden}
+
+::-webkit-scrollbar{width:7px}
+::-webkit-scrollbar-track{background:#151210}
+::-webkit-scrollbar-thumb{background:#6f4a18;border-radius:4px}
+
+nav{position:fixed;inset:0 0 auto 0;height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;z-index:40;background:rgba(10,8,7,.72);backdrop-filter:blur(8px);border-bottom:1px solid rgba(217,145,30,.2)}
+.brand{font-family:var(--serif);color:var(--text);text-decoration:none;font-size:36px;letter-spacing:.5px}
+.brand em{color:var(--gold);font-style:normal}
+.links{display:flex;gap:24px;list-style:none}
+.links a{color:var(--muted);text-decoration:none;text-transform:uppercase;font-size:12px;letter-spacing:1.8px;transition:.25s}
+.links a:hover,.links a.active{color:var(--gold)}
+
+main{padding-top:76px}
+.page-hero{min-height:74vh;position:relative;display:grid;align-items:center;padding:7vw 5%;background:linear-gradient(160deg,#14110f 0%,#0b0908 64%,#20160b 100%);overflow:hidden}
+.parallax-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.34;filter:saturate(1.15)}
+.parallax-layer{position:absolute;inset:0;background:linear-gradient(105deg,rgba(11,9,8,.92) 0%,rgba(11,9,8,.72) 55%,rgba(11,9,8,.88) 100%)}
+.hero-inner{position:relative;z-index:2;max-width:820px}
+.eyebrow{color:var(--gold);font-size:12px;text-transform:uppercase;letter-spacing:3px;margin-bottom:16px}
+h1{font-family:var(--serif);font-size:clamp(44px,8vw,92px);line-height:1.02;margin-bottom:14px}
+.hero-copy{max-width:700px;color:var(--muted);line-height:1.8;font-size:18px}
+
+.section{padding:80px 5%}
+.wrap{max-width:1220px;margin:0 auto}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid rgba(217,145,30,.18);overflow:hidden}
+.card-media{height:240px;background-size:cover;background-position:center;transform:scale(1.04);transition:transform .6s}
+.card:hover .card-media{transform:scale(1.1)}
+.card-body{padding:20px}
+.card h3{font-family:var(--serif);font-size:28px;margin-bottom:8px}
+.card p{color:var(--muted);line-height:1.7}
+
+.gallery{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+.tile{min-height:250px;background-size:cover;background-position:center;position:relative}
+.tile::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 38%,rgba(0,0,0,.55) 100%)}
+.tile b{position:absolute;z-index:2;left:14px;bottom:14px;font-family:var(--serif);font-size:22px}
+
+.form-card{background:var(--card);border:1px solid rgba(217,145,30,.2);padding:24px}
+label{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+input,select,textarea{width:100%;margin-bottom:12px;background:#120f0d;border:1px solid rgba(217,145,30,.2);padding:12px 14px;color:var(--text);font-family:var(--sans)}
+button{background:var(--gold);color:#1b1208;border:none;padding:12px 18px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .8s,transform .8s}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .8s,transform .8s}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+
+footer{padding:30px 5%;text-align:center;border-top:1px solid rgba(217,145,30,.18);color:var(--muted);font-size:12px}
+
+@media (max-width:1000px){
+  .grid-2,.grid-3,.gallery{grid-template-columns:1fr 1fr}
+}
+@media (max-width:720px){
+  nav{height:auto;padding:12px 5%;flex-direction:column;gap:10px}
+  main{padding-top:108px}
+  .links{flex-wrap:wrap;justify-content:center;gap:12px}
+  .grid-2,.grid-3,.gallery{grid-template-columns:1fr}
+  .card-media{height:210px}
+}

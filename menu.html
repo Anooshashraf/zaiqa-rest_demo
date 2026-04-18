@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu - Zaiqa</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+.menu-head{padding:26px 5% 8px}
+.menu-wrap{max-width:1220px;margin:0 auto}
+.menu-filters{display:flex;flex-wrap:wrap;gap:8px;padding:0 0 24px}
+.filter-btn{background:transparent;border:1px solid rgba(217,145,30,.28);color:var(--muted);padding:10px 16px;letter-spacing:1.4px;text-transform:uppercase;font-size:11px;cursor:pointer;transition:.25s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(217,145,30,.12)}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.menu-card{background:var(--card);border:1px solid rgba(217,145,30,.16);overflow:hidden;transition:transform .25s}
+.menu-card:hover{transform:translateY(-4px)}
+.menu-card-img{height:220px;background-size:cover;background-position:center}
+.menu-card-body{padding:18px}
+.menu-card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}
+.menu-card h3{font-family:var(--serif);font-size:26px;line-height:1.1}
+.price{font-family:var(--serif);color:var(--gold);font-size:22px;white-space:nowrap}
+.menu-card p{color:var(--muted);line-height:1.7;font-size:14px}
+.badge{display:inline-block;margin-top:10px;border:1px solid rgba(217,145,30,.35);padding:4px 10px;font-size:10px;letter-spacing:1.4px;color:var(--gold);text-transform:uppercase}
+.menu-card-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px}
+.add-btn{background:transparent;border:1px solid rgba(217,145,30,.4);color:var(--gold);padding:8px 12px;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;cursor:pointer;transition:.22s}
+.add-btn:hover{background:rgba(217,145,30,.12);border-color:var(--gold-soft)}
+.nav-right{display:flex;align-items:center}
+.nav-cart{background:transparent;border:1px solid rgba(217,145,30,.35);color:var(--gold);padding:9px 14px;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;cursor:pointer;transition:.22s;display:inline-flex;align-items:center;gap:8px}
+.nav-cart:hover{background:rgba(217,145,30,.12)}
+.cart-count{background:#c33;color:#fff;min-width:18px;height:18px;padding:0 5px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.menu-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(90px);background:#1a1512;border:1px solid rgba(217,145,30,.45);color:var(--text);padding:10px 16px;font-size:12px;letter-spacing:.4px;z-index:200;transition:transform .3s}
+.menu-toast.show{transform:translateX(-50%) translateY(0)}
+@media (max-width:1020px){.menu-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.menu-grid{grid-template-columns:1fr}.menu-card-img{height:200px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="zaiqa_restaurant.html">Zaiqa <em>Fine</em></a>
+  <ul class="links">
+    <li><a href="our-story.html">Our Story</a></li>
+    <li><a href="cuisines.html">Cuisines</a></li>
+    <li><a class="active" href="menu.html">Menu</a></li>
+    <li><a href="experience.html">Experience</a></li>
+    <li><a href="reserve.html">Reserve</a></li>
+    <li><a href="location.html">Location</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-cart" onclick="goToHomeCart()">Cart <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</nav>
+<main>
+  <section class="page-hero">
+    <div class="parallax-bg" style="background-image:url('https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1800&q=80')"></div>
+    <div class="parallax-layer"></div>
+    <div class="hero-inner reveal">
+      <div class="eyebrow">Signature Plates</div>
+      <h1>The Full Menu Experience.</h1>
+      <p class="hero-copy">From hearty classics to modern comfort food, every menu line is engineered for flavour and consistency.</p>
+    </div>
+  </section>
+
+  <section class="menu-head">
+    <div class="menu-wrap">
+      <div class="menu-filters" id="menuFilters"></div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </div>
+  </section>
+</main>
+<footer>Copyright 2026 Zaiqa Restaurant</footer>
+<div class="menu-toast" id="menuToast">Added to cart</div>
+<script src="provided-images.js"></script>
+<script src="theme.js"></script>
+<script>
+const MENU = {
+  desi: [
+    {id:1,name:"Chicken Karahi",price:850,img:"chicken_karahi",desc:"Juicy chicken cooked in our signature tomato-based karahi masala with ginger & green chilies. Served with naan.",tags:["Signature","Spicy","Must Try"],badge:"Must Try"},
+    {id:2,name:"Beef Biryani",price:450,img:"biryani",desc:"Fragrant basmati rice layered with slow-cooked beef, whole spices, and caramelised onions.",tags:["Classic","Spicy","Rice"]},
+    {id:3,name:"Chicken Tikka",price:700,img:"chicken_tikka",desc:"Tender chicken marinated in yoghurt and spices, charcoal-grilled to perfection. Served with raita.",tags:["Grill","Charcoal","Popular"],badge:"Popular"},
+    {id:4,name:"Behari Kebab",price:550,img:"behari_kebab",desc:"Thin-cut beef marinated in behari masala, skewered and cooked on a flat tawa. A Karachi classic.",tags:["Beef","Tawa","Classic"]},
+    {id:5,name:"Gola Kebab",price:500,img:"gola_kebab",desc:"Minced beef mixed with spices and herbs, shaped into spheres and char-grilled until juicy inside.",tags:["Beef","Grilled","Juicy"],badge:"Chef's Pick"},
+    {id:6,name:"BBQ Platter",price:1800,img:"bbq",desc:"Mixed platter of chicken tikka, seekh kebab, reshmi kebab and boti - perfect for sharing.",tags:["Platter","Grill","Sharing"]},
+    {id:7,name:"Haleem",price:380,img:"haleem",desc:"Slow-cooked wheat, lentils and beef simmered for 6 hours with aromatic spices. A Karachi staple.",tags:["Slow Cooked","Winter Special","Comfort"]},
+    {id:8,name:"Chicken Handi",price:750,img:"handi",desc:"Tender chicken pieces slow-cooked in a clay handi with cream, tomatoes and hand-ground spices.",tags:["Creamy","Handi","Desi"]},
+    {id:9,name:"Chicken Nehari",price:550,img:"chicken_nehari",desc:"Slow-braised chicken nehari with marrow, topped with crispy fried onions and fresh ginger.",tags:["Breakfast","Slow Cooked","Rich"]},
+    {id:10,name:"Desi Pulao",price:350,img:"pulao",desc:"Aromatic yakhni pulao cooked with whole spices, perfectly separated grains and tender meat.",tags:["Rice","Aromatic","Light"]},
+    {id:11,name:"Paye",price:420,img:"paye",desc:"Traditional trotters slow-cooked overnight with ginger, garlic and whole spices. Soul food.",tags:["Traditional","Overnight","Hearty"]},
+    {id:12,name:"Desi Feast Platter",price:2200,img:"desi_food",desc:"The ultimate desi spread - karahi, biryani, kebabs, raita, naan and dessert for a family of 4.",tags:["Family","Platter","Special"],badge:"Family Deal"}
+  ],
+  chinese: [
+    {id:13,name:"Chicken Chilli Dry",price:620,img:"chicken_chilli",desc:"Crispy fried chicken tossed in a fiery chilli sauce with bell peppers and spring onion.",tags:["Dry","Spicy","Crispy"],badge:"Bestseller"},
+    {id:14,name:"Beef Chilli Dry",price:700,img:"beef_chilli",desc:"Tender strips of beef wok-tossed in dark soy, chilli sauce, capsicum and red onion.",tags:["Beef","Wok","Spicy"]},
+    {id:15,name:"Chicken Manchurian",price:580,img:"chicken_manchurian",desc:"Golden fried chicken in our house manchurian gravy - tangy, savoury and utterly addictive.",tags:["Gravy","Chinese","Popular"],badge:"Popular"},
+    {id:16,name:"Chinese Fried Rice",price:380,img:"chinese_manchurian",desc:"Wok-fried basmati rice with eggs, vegetables, and our signature Chinese seasoning.",tags:["Rice","Wok","Light"]},
+    {id:17,name:"Beef Noodle Bowl",price:650,img:"beef_noodle",desc:"Rich beef broth with thick noodles, kale, kimchi, shiitake mushrooms and crispy beef.",tags:["Noodles","Broth","Hearty"]},
+    {id:18,name:"Chow Mein",price:420,img:"chowmein",desc:"Stir-fried egg noodles with shredded chicken, vegetables and a hint of sesame oil.",tags:["Noodles","Quick","Classic"]},
+    {id:19,name:"Schezwan Chicken",price:640,img:"schezwan",desc:"Fiery Schezwan-style chicken with fried rice - bold, numbing heat with complex flavours.",tags:["Schezwan","Hot","Signature"],badge:"Spicy"},
+    {id:20,name:"Hot & Sour Soup",price:280,img:"hot_soup",desc:"Classic Chinese hot & sour soup with egg drops, tofu, mushrooms and rice vinegar.",tags:["Soup","Starter","Hot"]},
+    {id:21,name:"Chicken Hotpot",price:950,img:"hotpot",desc:"Simmering hotpot with chicken, tofu, bok choy, mushrooms and your choice of dipping sauces.",tags:["Hotpot","Sharing","Warm"]},
+    {id:22,name:"Mixed Hotpot",price:1100,img:"hotpot2",desc:"The full hotpot experience - beef, chicken, vegetables, noodles in a bubbling fragrant broth.",tags:["Hotpot","Sharing","Premium"],badge:"Must Try"}
+  ],
+  fastfood: [
+    {id:23,name:"Beef Burger",price:380,img:"beef_burger",desc:"Double beef patty with crispy lettuce, tomato, cheese, pickles and our house sauce. Served with fries.",tags:["Beef","Double Patty","Fries"],badge:"Bestseller"},
+    {id:24,name:"Zinger Burger",price:350,img:"zinger",desc:"Crispy spiced chicken fillet with coleslaw, mayo and pickles in a toasted sesame bun.",tags:["Chicken","Crispy","Spicy"]},
+    {id:25,name:"Broast",price:320,img:"broast",desc:"Pressure-fried golden crispy broast chicken - juicy inside, impossibly crunchy outside.",tags:["Fried","Crispy","Classic"]},
+    {id:26,name:"Chicken Wings",price:450,img:"wings",desc:"8-piece crispy wings tossed in buffalo, BBQ or Schezwan sauce of your choice.",tags:["Wings","8pcs","Sauce Choice"]},
+    {id:27,name:"Club Sandwich",price:320,img:"sandwich",desc:"Triple-decker club sandwich with chicken, turkey, lettuce, tomato and mayo on toasted bread.",tags:["Sandwich","Light","Grilled"]},
+    {id:28,name:"Lava Pizza",price:680,img:"pizza",desc:"Cheese-stuffed crust pizza loaded with chicken, capsicum and our signature tomato base. Oozing molten cheese.",tags:["Pizza","Cheese Pull","Sharing"],badge:"New"}
+  ],
+  desserts: [
+    {id:29,name:"Chocolate Bomb",price:420,img:"dessert3",desc:"Molten chocolate sphere with a vanilla cream centre. Pour hot caramel to watch it melt open.",tags:["Chocolate","Theatrical","Hot"],badge:"Viral"},
+    {id:30,name:"Tiramisu",price:380,img:"dessert2",desc:"Classic Italian tiramisu with mascarpone, espresso-soaked ladyfingers and cocoa dusting.",tags:["Italian","Cold","Coffee"]},
+    {id:31,name:"Panna Cotta",price:350,img:"panna_cotta",desc:"Silky vanilla panna cotta topped with fresh berries and a light berry coulis.",tags:["Light","Italian","Cold"]},
+    {id:32,name:"Brulee Surprise",price:400,img:"dessert4",desc:"Caramelised custard blocks with a cherry reduction - an elegant reimagining of a classic.",tags:["Caramel","Plated","Elegant"]},
+    {id:33,name:"Meringue Dome",price:450,img:"dessert5",desc:"Toasted meringue dome over mango sorbet, coconut shavings and caramel drizzle.",tags:["Mango","Meringue","Tropical"],badge:"Chef's Pick"},
+    {id:34,name:"Mango Panna Cotta",price:390,img:"dessert6",desc:"Layered coconut panna cotta with mango gelee, fresh mint and coconut flakes.",tags:["Mango","Tropical","Light"]}
+  ]
+};
+
+const IMG_URLS = {
+  chicken_karahi:'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=1400&q=80',
+  biryani:'https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&w=1400&q=80',
+  chicken_tikka:'https://images.unsplash.com/photo-1542367592-8849eb950fd8?auto=format&fit=crop&w=1400&q=80',
+  behari_kebab:'https://images.unsplash.com/photo-1529692236671-f1dc64e7f65c?auto=format&fit=crop&w=1400&q=80',
+  gola_kebab:'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1400&q=80',
+  bbq:'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=1400&q=80',
+  haleem:'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=1400&q=80',
+  handi:'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1400&q=80',
+  chicken_nehari:'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=1400&q=80',
+  pulao:'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1400&q=80',
+  paye:'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80',
+  desi_food:'https://images.unsplash.com/photo-1526318896980-cf78c088247c?auto=format&fit=crop&w=1400&q=80',
+  chicken_chilli:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1400&q=80',
+  beef_chilli:'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?auto=format&fit=crop&w=1400&q=80',
+  chicken_manchurian:'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=1400&q=80',
+  chinese_manchurian:'https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=1400&q=80',
+  beef_noodle:'https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=1400&q=80',
+  chowmein:'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=1400&q=80',
+  schezwan:'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1400&q=80',
+  hot_soup:'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1400&q=80',
+  hotpot:'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1400&q=80',
+  hotpot2:'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=1400&q=80',
+  beef_burger:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1400&q=80',
+  zinger:'https://images.unsplash.com/photo-1606755962773-d324e9a13086?auto=format&fit=crop&w=1400&q=80',
+  broast:'https://images.unsplash.com/photo-1562967916-eb82221dfb92?auto=format&fit=crop&w=1400&q=80',
+  wings:'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=1400&q=80',
+  sandwich:'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=1400&q=80',
+  pizza:'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1400&q=80',
+  dessert3:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=1400&q=80',
+  dessert2:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=1400&q=80',
+  panna_cotta:'https://images.unsplash.com/photo-1464306076886-da185f6a9d05?auto=format&fit=crop&w=1400&q=80',
+  dessert4:'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=1400&q=80',
+  dessert5:'https://images.unsplash.com/photo-1488477304112-4944851de03d?auto=format&fit=crop&w=1400&q=80',
+  dessert6:'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=1400&q=80'
+};
+
+const labels={desi:'Desi Kitchen',chinese:'Chinese Wok',fastfood:'Fast Food',desserts:'Desserts'};
+let active='desi';
+const PROVIDED_IMGS = window.PROVIDED_IMGS || {};
+const CART_KEY = 'zaiqa_cart';
+
+const params = new URLSearchParams(window.location.search);
+const catFromQuery = params.get('cat');
+const catFromHash = window.location.hash.startsWith('#cat=') ? window.location.hash.replace('#cat=','') : '';
+if (MENU[catFromQuery]) active = catFromQuery;
+else if (MENU[catFromHash]) active = catFromHash;
+
+function renderFilters(){
+  const host=document.getElementById('menuFilters');
+  host.innerHTML=Object.keys(MENU).map(k=>`<button class="filter-btn ${k===active?'active':''}" onclick="setCat('${k}')">${labels[k]}</button>`).join('');
+}
+
+function renderCards(){
+  const host=document.getElementById('menuGrid');
+  host.innerHTML=MENU[active].map(item=>`
+    <article class="menu-card reveal">
+      <div class="menu-card-img" style="background-image:url('${getDishImage(item.img)}')"></div>
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <h3>${item.name}</h3>
+          <span class="price">Rs. ${item.price}</span>
+        </div>
+        <p>${item.desc}</p>
+        ${item.badge?`<span class="badge">${item.badge}</span>`:''}
+        <div class="menu-card-actions">
+          <span></span>
+          <button class="add-btn" onclick="quickAdd(${item.id})">Add +</button>
+        </div>
+      </div>
+    </article>`).join('');
+  document.querySelectorAll('.menu-card.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('visible'),i*80));
+}
+
+function setCat(cat){ active=cat; renderFilters(); renderCards(); }
+
+function getDishImage(key){
+  return PROVIDED_IMGS[key] || IMG_URLS[key] || '';
+}
+
+function getAllItems(){ return Object.values(MENU).flat(); }
+function getItem(id){ return getAllItems().find(x=>x.id===id); }
+function loadCart(){
+  try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]');}
+  catch{return []}
+}
+function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+function updateCartCount(){
+  const cart = loadCart();
+  const qty = cart.reduce((sum, it)=>sum + it.qty, 0);
+  const el = document.getElementById('cartCount');
+  if(el) el.textContent = qty;
+}
+function showToast(msg){
+  const t = document.getElementById('menuToast');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1200);
+}
+function quickAdd(id){
+  const item = getItem(id);
+  if(!item) return;
+  const cart = loadCart();
+  const existing = cart.find(x=>x.id===id);
+  if(existing) existing.qty += 1;
+  else cart.push({id:item.id,name:item.name,price:item.price,img:item.img,qty:1});
+  saveCart(cart);
+  updateCartCount();
+  showToast(`${item.name} added to cart`);
+}
+function goToHomeCart(){ window.location.href = 'zaiqa_restaurant.html?openCart=1'; }
+
+async function loadProvidedImages(){
+  return Promise.resolve();
+}
+
+async function initMenu(){
+  renderFilters();
+  await loadProvidedImages();
+  renderCards();
+  updateCartCount();
+}
+
+initMenu();
+</script>
+</body>
+</html>
