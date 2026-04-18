@@ -1,4 +1,4 @@
-const nodes = document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const nodes = document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale');
 const io = new IntersectionObserver((entries)=>{
   entries.forEach((entry)=>{
     if(entry.isIntersecting) entry.target.classList.add('visible');
