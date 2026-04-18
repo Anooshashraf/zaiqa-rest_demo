@@ -27,6 +27,7 @@ nav.scrolled{padding:12px 5%}
 .nav-links{display:flex;gap:30px;list-style:none;align-items:center}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;transition:color .3s}
 .nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-toggle{display:none;background:transparent;border:1px solid rgba(217,145,30,.45);color:var(--gold);padding:8px 10px;font-size:18px;line-height:1;cursor:pointer}
 
 main{padding-top:92px}
 .page-hero{min-height:74vh;position:relative;display:grid;align-items:center;padding:7vw 5%;background:linear-gradient(160deg,#14110f 0%,#0b0908 64%,#20160b 100%);overflow:hidden}
@@ -76,9 +77,12 @@ footer{padding:30px 5%;text-align:center;border-top:1px solid rgba(217,145,30,.1
   .grid-2,.grid-3,.gallery{grid-template-columns:1fr 1fr}
 }
 @media (max-width:720px){
-  nav{padding:12px 5%;flex-direction:column;gap:10px}
-  main{padding-top:146px}
-  .nav-links{flex-wrap:wrap;justify-content:center;gap:12px}
+  nav{padding:12px 5%;flex-wrap:wrap;gap:10px}
+  main{padding-top:90px}
+  .nav-toggle{display:flex;align-items:center;justify-content:center;margin-left:auto}
+  .nav-links,.nav-right{display:none;width:100%}
+  nav.open .nav-links{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-top:8px}
+  nav.open .nav-right{display:flex;justify-content:flex-start}
   .nav-links a{font-size:11px;letter-spacing:1.3px}
   .nav-cart{padding:8px 14px;font-size:10px;letter-spacing:1.4px}
   .grid-2,.grid-3,.gallery{grid-template-columns:1fr}

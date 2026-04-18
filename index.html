@@ -34,6 +34,7 @@ nav.scrolled{background:rgba(11,9,8,.97);backdrop-filter:blur(20px);padding:12px
 .nav-links a{color:var(--text-muted);text-decoration:none;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;transition:color .3s;cursor:pointer}
 .nav-links a:hover{color:var(--saffron)}
 .nav-right{display:flex;align-items:center;gap:16px}
+.nav-toggle{display:none;background:transparent;border:1px solid rgba(217,145,30,.45);color:var(--saffron);padding:8px 10px;font-size:18px;line-height:1;cursor:pointer}
 .nav-cart{background:transparent;color:var(--saffron);border:1px solid rgba(217,145,30,.6);padding:10px 22px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s;font-weight:600;display:flex;align-items:center;gap:8px}
 .nav-cart:hover{background:rgba(217,145,30,.13);transform:translateY(-1px)}
 .cart-count{background:var(--crimson);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700}
@@ -349,7 +350,10 @@ footer{background:#080808;padding:70px 5% 30px;border-top:1px solid rgba(232,137
 
 @media (max-width:900px){
   nav{position:relative;flex-wrap:wrap;gap:14px;padding:14px 4%}
-  .nav-links{order:3;width:100%;justify-content:center;flex-wrap:wrap;gap:14px}
+  .nav-toggle{display:flex;align-items:center;justify-content:center;margin-left:auto}
+  .nav-links,.nav-right{display:none;order:3;width:100%}
+  nav.open .nav-links{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding-top:6px}
+  nav.open .nav-right{display:flex;justify-content:flex-start}
   .hero-stage::before{display:none}
   .hero-rail{position:relative;width:100%;top:auto;bottom:auto;grid-template-columns:1fr 1fr;grid-template-rows:1fr;display:grid;padding:0;gap:4px}
   .hero-stage{display:block;padding:24px 4% 44px}
@@ -409,6 +413,7 @@ footer{background:#080808;padding:70px 5% 30px;border-top:1px solid rgba(232,137
     <div class="nav-logo">ZAIQA</div>
     <div class="nav-logo-sub">Authentic Flavours</div>
   </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
   <ul class="nav-links">
     <li><a href="our-story.html">Our Story</a></li>
     <li><a href="cuisines.html">Cuisines</a></li>
@@ -824,6 +829,32 @@ let currentCat = "desi";
 let modalItem = null, modalQty = 1;
 let ckStep = 1;
 let selectedPayMethod = "JazzCash";
+const nav = document.getElementById('mainNav');
+const navToggle = document.getElementById('navToggle');
+
+function closeNavMenu(){
+  if(!nav || !navToggle) return;
+  nav.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+}
+
+function setupNavToggle(){
+  if(!nav || !navToggle) return;
+  navToggle.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  nav.querySelectorAll('.nav-links a').forEach((link) => {
+    link.addEventListener('click', closeNavMenu);
+  });
+
+  window.addEventListener('resize', () => {
+    if(window.innerWidth > 900){
+      closeNavMenu();
+    }
+  });
+}
 
 // ─── INIT ───────────────────────────────────────────────────────
 window.addEventListener('load', () => {
@@ -848,13 +879,14 @@ window.addEventListener('load', () => {
   // Scroll listener
   window.addEventListener('scroll', onScroll);
   onScroll();
+  setupNavToggle();
 
   const params = new URLSearchParams(window.location.search);
   if(params.get('openCart') === '1') openCart();
 });
 
 function onScroll(){
-  const nav = document.getElementById('mainNav');
+  if(!nav) return;
   nav.classList.toggle('scrolled', window.scrollY > 70);
   // Parallax hero
   const backdrop = document.getElementById('heroBackdrop');

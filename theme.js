@@ -32,6 +32,32 @@ function goToHomeCart(){
 }
 
 const mainNav = document.getElementById('mainNav');
+const navToggle = document.getElementById('navToggle');
+
+function closeNavMenu(){
+  if(!mainNav || !navToggle) return;
+  mainNav.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+}
+
+function setupNavToggle(){
+  if(!mainNav || !navToggle) return;
+  navToggle.addEventListener('click', () => {
+    const isOpen = mainNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  mainNav.querySelectorAll('.nav-links a').forEach((link) => {
+    link.addEventListener('click', closeNavMenu);
+  });
+
+  window.addEventListener('resize', () => {
+    if(window.innerWidth > 720){
+      closeNavMenu();
+    }
+  });
+}
+
 function updateNavState(){
   if(!mainNav) return;
   if(window.scrollY > 8){
@@ -43,4 +69,5 @@ function updateNavState(){
 
 window.addEventListener('scroll', updateNavState, {passive:true});
 updateNavState();
+setupNavToggle();
 syncCartCount();
