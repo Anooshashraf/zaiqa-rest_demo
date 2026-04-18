@@ -19,7 +19,7 @@ function syncCartCount(){
   const countNode = document.getElementById('cartCount');
   if(!countNode) return;
   try{
-    const cart = JSON.parse(localStorage.getItem('zaiqaCart') || '[]');
+    const cart = JSON.parse(localStorage.getItem('zaiqa_cart') || '[]');
     const total = cart.reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
     countNode.textContent = String(total);
   }catch(_err){
@@ -28,7 +28,7 @@ function syncCartCount(){
 }
 
 function goToHomeCart(){
-  window.location.href = 'index.html#menu';
+  window.location.href = 'index.html?openCart=1';
 }
 
 const mainNav = document.getElementById('mainNav');

@@ -311,6 +311,7 @@ nav.scrolled{background:rgba(11,9,8,.97);backdrop-filter:blur(20px);padding:12px
 .btn-ck-back:hover{border-color:var(--saffron);color:var(--saffron)}
 .btn-ck-next{background:var(--saffron);color:#fff;border:none;padding:12px 26px;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:700;transition:all .3s}
 .btn-ck-next:hover{background:var(--saffron-light)}
+.btn-ck-next:disabled{background:#5b4a37;color:#bda98f;cursor:not-allowed;opacity:.8}
 .ck-success{text-align:center;padding:40px 20px}
 .ck-success-icon{font-size:70px;display:block;margin-bottom:20px;animation:bounceIn .6s}
 .ck-success-title{font-family:var(--font-serif);font-size:28px;color:var(--cream);margin-bottom:12px}
@@ -974,6 +975,51 @@ function openCheckout(){ closeCart(); ckStep=1; renderCk(); document.getElementB
 function closeCkModal(){ document.getElementById('ckOverlay').classList.remove('open'); }
 function closeCkBg(e){ if(e.target.id==='ckOverlay') closeCkModal(); }
 
+function isDeliveryStepValid(){
+  const fields = {
+    first: document.getElementById('ckFirst')?.value.trim() || '',
+    last: document.getElementById('ckLast')?.value.trim() || '',
+    email: document.getElementById('ckEmail')?.value.trim() || '',
+    phone: document.getElementById('ckPhone')?.value.trim() || '',
+    address: document.getElementById('ckAddress')?.value.trim() || '',
+    city: document.getElementById('ckCity')?.value.trim() || ''
+  };
+  const atPos = fields.email.indexOf('@');
+  const dotPos = fields.email.lastIndexOf('.');
+  const emailOk = atPos > 0 && dotPos > atPos + 1 && dotPos < fields.email.length - 1;
+  const phoneDigits = fields.phone.replace(/\D/g, '');
+  const phoneOk = phoneDigits.length >= 6;
+  return Boolean(fields.first && fields.last && fields.address && fields.city && emailOk && phoneOk);
+}
+
+function updateDeliveryContinueState(){
+  const btn = document.getElementById('ckContinueBtn');
+  if(!btn) return false;
+  const ok = isDeliveryStepValid();
+  btn.disabled = !ok;
+  return ok;
+}
+
+function setupDeliveryValidation(){
+  const ids = ['ckFirst','ckLast','ckEmail','ckPhone','ckAddress','ckCity'];
+  const events = ['input','change','blur','keyup'];
+  ids.forEach((id) => {
+    const node = document.getElementById(id);
+    if(!node) return;
+    events.forEach((evt) => node.addEventListener(evt, updateDeliveryContinueState));
+  });
+  // Autofill may update values without firing normal input events.
+  requestAnimationFrame(updateDeliveryContinueState);
+  setTimeout(updateDeliveryContinueState, 120);
+  updateDeliveryContinueState();
+}
+
+function continueFromDelivery(){
+  if(!updateDeliveryContinueState()) return;
+  ckStep++;
+  renderCk();
+}
+
 function renderCk(){
   [1,2,3].forEach(n=>{
     const el = document.getElementById('cks'+n);
@@ -991,17 +1037,18 @@ function renderCk(){
         <div class="ck-fg"><label>First Name</label><input id="ckFirst" placeholder="Ahmed"></div>
         <div class="ck-fg"><label>Last Name</label><input id="ckLast" placeholder="Khan"></div>
       </div>
-      <div class="ck-fg"><label>Email</label><input type="email" placeholder="ahmed@email.com"></div>
+      <div class="ck-fg"><label>Email</label><input id="ckEmail" type="email" placeholder="ahmed@email.com"></div>
       <div class="ck-fg"><label>Phone</label><input id="ckPhone" placeholder="+92 300 0000000"></div>
-      <div class="ck-fg"><label>Delivery Address</label><input placeholder="House/Flat No, Street, Area"></div>
+      <div class="ck-fg"><label>Delivery Address</label><input id="ckAddress" placeholder="House/Flat No, Street, Area"></div>
       <div class="ck-2col">
-        <div class="ck-fg"><label>City</label><input placeholder="Karachi"></div>
+        <div class="ck-fg"><label>City</label><input id="ckCity" placeholder="Karachi"></div>
         <div class="ck-fg"><label>Delivery Type</label><select><option>Home Delivery</option><option>Pickup</option><option>Dine In</option></select></div>
       </div>
       <div class="ck-nav">
         <button class="btn-ck-back" onclick="closeCkModal()">Cancel</button>
-        <button class="btn-ck-next" onclick="ckStep++;renderCk()">Continue →</button>
+        <button class="btn-ck-next" id="ckContinueBtn" onclick="continueFromDelivery()" disabled>Continue →</button>
       </div>`;
+    setupDeliveryValidation();
   } else if(ckStep===2){
     body.innerHTML=`
       <div class="ck-section-title">Payment Method</div>
