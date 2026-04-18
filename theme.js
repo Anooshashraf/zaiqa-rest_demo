@@ -14,3 +14,33 @@ function updateParallax(){
 }
 window.addEventListener('scroll', updateParallax, {passive:true});
 updateParallax();
+
+function syncCartCount(){
+  const countNode = document.getElementById('cartCount');
+  if(!countNode) return;
+  try{
+    const cart = JSON.parse(localStorage.getItem('zaiqaCart') || '[]');
+    const total = cart.reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
+    countNode.textContent = String(total);
+  }catch(_err){
+    countNode.textContent = '0';
+  }
+}
+
+function goToHomeCart(){
+  window.location.href = 'index.html#menu';
+}
+
+const mainNav = document.getElementById('mainNav');
+function updateNavState(){
+  if(!mainNav) return;
+  if(window.scrollY > 8){
+    mainNav.classList.add('scrolled');
+  }else{
+    mainNav.classList.remove('scrolled');
+  }
+}
+
+window.addEventListener('scroll', updateNavState, {passive:true});
+updateNavState();
+syncCartCount();

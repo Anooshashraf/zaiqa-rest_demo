@@ -7,9 +7,12 @@
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
-<nav>
-  <a class="brand" href="zaiqa_restaurant.html">Zaiqa <em>Fine</em></a>
-  <ul class="links">
+<nav id="mainNav">
+  <a class="nav-logo-wrap" href="index.html">
+    <div class="nav-logo">ZAIQA</div>
+    <div class="nav-logo-sub">Authentic Flavours</div>
+  </a>
+  <ul class="nav-links">
     <li><a class="active" href="our-story.html">Our Story</a></li>
     <li><a href="cuisines.html">Cuisines</a></li>
     <li><a href="menu.html">Menu</a></li>
@@ -17,6 +20,11 @@
     <li><a href="reserve.html">Reserve</a></li>
     <li><a href="location.html">Location</a></li>
   </ul>
+  <div class="nav-right">
+    <button class="nav-cart" onclick="goToHomeCart()">
+      Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
 </nav>
 <main>
   <section class="page-hero">
